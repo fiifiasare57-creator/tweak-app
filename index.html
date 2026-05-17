@@ -4,49 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Tweaks | Viral Video Feed</title>
-    <link rel="manifest" href="/manifest.json">
+    <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0a0a0f">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: #0a0a0f; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; overflow: hidden; height: 100vh; width: 100vw; position: fixed; }
+        body { background: #0a0a0f; font-family: 'Inter', sans-serif; overflow: hidden; height: 100vh; }
         
-        .feed-container {
-            height: 100vh;
-            width: 100%;
-            overflow-y: scroll;
-            scroll-snap-type: y mandatory;
-            scroll-behavior: smooth;
-        }
+        .feed-container { height: 100vh; width: 100%; overflow-y: scroll; scroll-snap-type: y mandatory; }
         .feed-container::-webkit-scrollbar { display: none; }
         
-        .feed-item {
-            scroll-snap-align: start;
-            height: 100vh;
-            width: 100%;
-            position: relative;
-            background: #000;
-        }
-        
-        .video-element {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
+        .feed-item { scroll-snap-align: start; height: 100vh; width: 100%; position: relative; background: #000; }
+        .video-element { width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; }
         
         .gradient-overlay {
             position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
+            bottom: 0; left: 0; right: 0;
             background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.3) 60%, transparent 100%);
             height: 50%;
             pointer-events: none;
@@ -98,14 +75,13 @@
         }
         
         .username { font-weight: 800; font-size: 15px; display: flex; align-items: center; gap: 8px; margin-bottom: 4px; cursor: pointer; }
-        .caption-text { font-size: 14px; font-weight: 500; margin-top: 4px; line-height: 1.3; }
+        .username img { width: 24px; height: 24px; border-radius: 50%; }
+        .caption-text { font-size: 14px; font-weight: 500; margin-top: 4px; }
         .music-tag { font-size: 12px; opacity: 0.85; margin-top: 8px; display: flex; align-items: center; gap: 8px; cursor: pointer; }
         
         .top-nav {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
+            top: 0; left: 0; right: 0;
             padding: 14px 20px;
             display: flex;
             justify-content: space-between;
@@ -116,13 +92,36 @@
         
         .logo { font-weight: 900; font-style: italic; font-size: 24px; background: linear-gradient(135deg, #f0abfc, #d946ef); -webkit-background-clip: text; background-clip: text; color: transparent; }
         
-        .avatar-small {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid #d946ef;
-            cursor: pointer;
+        .avatar-small { width: 36px; height: 36px; border-radius: 50%; border: 2px solid #d946ef; cursor: pointer; object-fit: cover; }
+        
+        .bottom-nav {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            background: rgba(10,10,15,0.95);
+            backdrop-filter: blur(20px);
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 20px 18px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            z-index: 50;
+        }
+        
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: rgba(255,255,255,0.5); cursor: pointer; }
+        .nav-item.active { color: #d946ef; }
+        .nav-item i { font-size: 24px; }
+        .nav-item span { font-size: 10px; font-weight: 500; }
+        
+        .floating-heart {
+            position: absolute;
+            font-size: 2rem;
+            pointer-events: none;
+            animation: likeBurst 0.6s forwards;
+        }
+        
+        @keyframes likeBurst {
+            0% { transform: scale(0.2); opacity: 0; }
+            40% { transform: scale(1.4); opacity: 1; }
+            100% { transform: scale(1); opacity: 0; top: -40px; }
         }
         
         .upload-fab {
@@ -145,8 +144,6 @@
             box-shadow: 0 4px 20px rgba(217, 70, 239, 0.5);
         }
         
-        .fab-inner:active { transform: scale(0.95); }
-        
         .fab-content {
             width: 48px;
             height: 48px;
@@ -161,47 +158,6 @@
         
         .fab-content i { font-size: 20px; color: white; }
         .fab-content span { font-size: 7px; font-weight: 900; color: white; margin-top: 2px; }
-        
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(10,10,15,0.95);
-            backdrop-filter: blur(20px);
-            display: flex;
-            justify-content: space-around;
-            padding: 8px 20px 18px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            z-index: 50;
-        }
-        
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            color: rgba(255,255,255,0.5);
-            cursor: pointer;
-            transition: color 0.2s;
-        }
-        
-        .nav-item.active { color: #d946ef; }
-        .nav-item i { font-size: 24px; }
-        .nav-item span { font-size: 10px; font-weight: 500; }
-        
-        .floating-heart {
-            position: absolute;
-            font-size: 2rem;
-            pointer-events: none;
-            animation: likeBurst 0.6s forwards;
-        }
-        
-        @keyframes likeBurst {
-            0% { transform: scale(0.2); opacity: 0; }
-            40% { transform: scale(1.4); opacity: 1; }
-            100% { transform: scale(1); opacity: 0; top: -40px; }
-        }
         
         .loading-spinner {
             position: fixed;
@@ -219,7 +175,7 @@
         <div class="logo">TWEAKS</div>
         <div>
             <img id="userAvatar" class="avatar-small" style="display: none;" onclick="window.location.href='/profile.html'">
-            <i id="loginIcon" class="fas fa-user-circle" style="color: white; font-size: 28px; cursor: pointer;"></i>
+            <i id="loginIcon" class="fas fa-user-circle" style="color: white; font-size: 32px; cursor: pointer;"></i>
         </div>
     </div>
     
@@ -240,50 +196,13 @@
     </div>
     
     <div class="bottom-nav">
-        <div class="nav-item active" data-page="feed">
-            <i class="fas fa-home"></i>
-            <span>Home</span>
-        </div>
-        <div class="nav-item" data-page="discover">
-            <i class="fas fa-compass"></i>
-            <span>Discover</span>
-        </div>
-        <div class="nav-item" data-page="profile">
-            <i class="fas fa-user"></i>
-            <span>Profile</span>
-        </div>
-    </div>
-
-    <!-- Upload Menu Modal -->
-    <div id="uploadMenu" class="fixed inset-0 bg-black/80 backdrop-blur-lg z-[100] hidden items-center justify-center">
-        <div class="bg-gray-900 rounded-3xl p-6 max-w-[280px] w-full text-center border border-white/20">
-            <div class="flex justify-end">
-                <button id="closeMenuBtn" class="text-white/60 text-2xl">&times;</button>
-            </div>
-            <h2 class="text-xl font-black italic mb-4 bg-gradient-to-r from-fuchsia-300 to-purple-300 bg-clip-text text-transparent">✨ create tweak</h2>
-            <div class="grid grid-cols-2 gap-3">
-                <div class="bg-white/10 p-3 rounded-xl flex flex-col items-center gap-1 cursor-pointer hover:bg-white/20" data-option="video">
-                    <i class="fas fa-video text-fuchsia-300 text-xl"></i>
-                    <span class="text-xs font-bold">Video</span>
-                </div>
-                <div class="bg-white/10 p-3 rounded-xl flex flex-col items-center gap-1 cursor-pointer hover:bg-white/20" data-option="photo">
-                    <i class="fas fa-camera text-purple-300 text-xl"></i>
-                    <span class="text-xs font-bold">Photo</span>
-                </div>
-                <div class="bg-white/10 p-3 rounded-xl flex flex-col items-center gap-1 cursor-pointer hover:bg-white/20" data-option="story">
-                    <i class="fas fa-star text-pink-300 text-xl"></i>
-                    <span class="text-xs font-bold">Story</span>
-                </div>
-                <div class="bg-white/10 p-3 rounded-xl flex flex-col items-center gap-1 cursor-pointer hover:bg-white/20" data-option="twimoji">
-                    <i class="fas fa-smile-wink text-indigo-300 text-xl"></i>
-                    <span class="text-xs font-bold">Twimoji</span>
-                </div>
-            </div>
-        </div>
+        <div class="nav-item active" data-page="feed"><i class="fas fa-home"></i><span>Home</span></div>
+        <div class="nav-item" data-page="discover"><i class="fas fa-compass"></i><span>Discover</span></div>
+        <div class="nav-item" data-page="profile"><i class="fas fa-user"></i><span>Profile</span></div>
     </div>
 
     <script type="module">
-        import { auth, db, collection, query, orderBy, limit, getDocs, doc, getDoc, updateDoc, arrayUnion, arrayRemove, onAuthStateChanged, signOut } from './js/firebase-config.js';
+        import { auth, db, doc, getDoc, updateDoc, arrayUnion, arrayRemove, onAuthStateChanged, signOut, DEMO_VIDEOS } from './js/firebase-config.js';
         
         let currentUser = null;
         let feedVideos = [];
@@ -295,42 +214,19 @@
             return n.toString();
         }
         
-        function showToast(message, icon = "✨") {
+        function showToast(message) {
             const toast = document.createElement('div');
             toast.className = 'fixed bottom-32 left-1/2 transform -translate-x-1/2 bg-black/80 backdrop-blur-lg text-white text-xs px-4 py-2 rounded-full z-[200] whitespace-nowrap';
-            toast.innerHTML = `${icon} ${message}`;
+            toast.innerHTML = `✨ ${message}`;
             document.body.appendChild(toast);
             setTimeout(() => toast.remove(), 2000);
-        }
-        
-        async function loadFeed() {
-            const feedContainer = document.getElementById('feedContainer');
-            feedContainer.innerHTML = '<div class="loading-spinner"><i class="fas fa-spinner fa-pulse text-3xl text-purple-500"></i><p class="mt-4 text-white/60">Loading videos...</p></div>';
-            
-            try {
-                const videosQuery = query(collection(db, 'videos'), orderBy('createdAt', 'desc'), limit(20));
-                const snapshot = await getDocs(videosQuery);
-                feedVideos = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                
-                if (feedVideos.length === 0) {
-                    feedVideos = [
-                        { id: 'demo1', videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-forest-stream-in-sunlight-529-large.mp4', username: 'nature_lover', userAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=nature', caption: 'Peaceful forest stream 🌿', music: 'Nature Sounds', likes: 12400, userId: 'demo' },
-                        { id: 'demo2', videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-waves-in-the-water-1164-large.mp4', username: 'ocean_vibes', userAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ocean', caption: 'Endless ocean therapy 🌊', music: 'Coastal Breeze', likes: 8700, userId: 'demo2' }
-                    ];
-                }
-                
-                renderFeed();
-            } catch (error) {
-                console.error('Error loading feed:', error);
-                feedContainer.innerHTML = '<div class="flex items-center justify-center h-screen"><div class="text-center"><i class="fas fa-wifi text-3xl text-red-500"></i><p class="mt-4 text-white/60">Connection error. Pull to refresh.</p></div></div>';
-            }
         }
         
         function renderFeed() {
             const feedContainer = document.getElementById('feedContainer');
             feedContainer.innerHTML = '';
             
-            feedVideos.forEach((video, index) => {
+            feedVideos.forEach((video) => {
                 const feedItem = document.createElement('div');
                 feedItem.className = 'feed-item';
                 feedItem.setAttribute('data-id', video.id);
@@ -352,13 +248,13 @@
                         <i class="far fa-heart"></i>
                         <span class="like-count">${formatNumber(video.likes || 0)}</span>
                     </div>
-                    <div class="action-icon comment-icon">
+                    <div class="action-icon">
                         <i class="far fa-comment"></i>
                     </div>
                     <div class="action-icon share-icon">
                         <i class="fas fa-share-alt"></i>
                     </div>
-                    <div class="action-icon save-icon">
+                    <div class="action-icon">
                         <i class="far fa-bookmark"></i>
                     </div>
                 `;
@@ -367,14 +263,14 @@
                 captionDiv.className = 'caption-area';
                 captionDiv.innerHTML = `
                     <div class="username" data-userid="${video.userId}">
-                        <img src="${video.userAvatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + video.username}" class="w-6 h-6 rounded-full">
+                        <img src="${video.userAvatar}">
                         <span>@${video.username}</span>
                         <i class="fas fa-check-circle text-blue-400 text-xs"></i>
                     </div>
-                    <div class="caption-text">${video.caption || 'No caption'}</div>
+                    <div class="caption-text">${video.caption}</div>
                     <div class="music-tag">
                         <i class="fas fa-music"></i>
-                        <span>${video.music || 'Original Audio'}</span>
+                        <span>${video.music}</span>
                     </div>
                 `;
                 
@@ -395,7 +291,7 @@
                 entries.forEach(entry => {
                     const video = entry.target;
                     if (entry.isIntersecting) {
-                        video.play().catch(e => console.log('Autoplay:', e));
+                        video.play().catch(() => {});
                         document.querySelectorAll('.video-element').forEach(v => { if (v !== video) v.pause(); });
                     } else {
                         video.pause();
@@ -407,7 +303,7 @@
         
         function attachEventListeners() {
             document.querySelectorAll('.like-icon').forEach(btn => {
-                btn.addEventListener('click', async (e) => {
+                btn.addEventListener('click', (e) => {
                     e.stopPropagation();
                     const videoId = btn.getAttribute('data-id');
                     const icon = btn.querySelector('i');
@@ -426,14 +322,7 @@
                         setTimeout(() => heart.remove(), 600);
                         
                         let currentLikes = parseInt(countSpan.innerText) || 0;
-                        if (isNaN(currentLikes)) currentLikes = 0;
                         countSpan.innerText = formatNumber(currentLikes + 1);
-                        
-                        if (currentUser && videoId !== 'demo1' && videoId !== 'demo2') {
-                            const videoRef = doc(db, 'videos', videoId);
-                            await updateDoc(videoRef, { likes: (currentLikes + 1), likedBy: arrayUnion(currentUser.uid) });
-                        }
-                        
                         if (navigator.vibrate) navigator.vibrate(30);
                     }
                 });
@@ -453,7 +342,7 @@
                     if (navigator.share) {
                         await navigator.share({ title: 'Tweaks Video', text: 'Check out this video!' });
                     } else {
-                        showToast('Link copied to clipboard!', '🔗');
+                        showToast('Link copied to clipboard!');
                         navigator.clipboard.writeText(window.location.href);
                     }
                 });
@@ -465,26 +354,12 @@
             item.addEventListener('click', () => {
                 const page = item.getAttribute('data-page');
                 if (page === 'profile') window.location.href = '/profile.html';
-                else if (page === 'discover') showToast('Discover page coming soon!', '🔍');
+                else if (page === 'discover') showToast('Discover page coming soon!');
             });
         });
         
-        // Upload button
-        const uploadMenu = document.getElementById('uploadMenu');
         document.getElementById('uploadBtn').addEventListener('click', () => {
-            uploadMenu.classList.remove('hidden');
-            uploadMenu.classList.add('flex');
-        });
-        document.getElementById('closeMenuBtn').addEventListener('click', () => {
-            uploadMenu.classList.add('hidden');
-            uploadMenu.classList.remove('flex');
-        });
-        document.querySelectorAll('[data-option]').forEach(opt => {
-            opt.addEventListener('click', () => {
-                showToast(`${opt.getAttribute('data-option').toUpperCase()} feature coming soon!`, '🚀');
-                uploadMenu.classList.add('hidden');
-                uploadMenu.classList.remove('flex');
-            });
+            showToast('Video upload coming soon! Use demo videos for now 🎥');
         });
         
         // Auth check
@@ -507,7 +382,9 @@
                 userAvatar.src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.uid}`;
             }
             
-            loadFeed();
+            // Load demo videos
+            feedVideos = DEMO_VIDEOS;
+            renderFeed();
         });
         
         userAvatar.addEventListener('click', () => window.location.href = '/profile.html');
